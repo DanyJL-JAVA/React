@@ -1,0 +1,96 @@
+// index.jsx
+
+import React from "react";
+import { useState } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+
+root.render(
+
+<App/>
+
+);
+
+
+
+// App.jsx
+
+
+import React from "react";
+import { useState } from "react";
+import { useReducer } from "react";
+import Create from "./Components/Create";
+import List from "./Components/List";
+import View from "./Components/View";
+
+
+const App = () => {
+
+
+  const myReducer = (state, action) => {
+
+
+    switch (action.type) {
+
+      case 'Add':
+
+        return {
+
+          count: state.count + 1
+
+        }
+
+
+      case 'Less':
+
+        return {
+
+          count: state.count - 1
+
+        }
+
+
+      default: return state.count
+
+
+    }
+
+
+
+  }
+
+
+  const [state, dispatch] = useReducer(myReducer, { count: 0 });
+
+  return (
+
+    <div>
+
+      <h5>UseReducer</h5>
+
+      <input type="button" id="addId" name="addName" className="addClass" value="Add" onClick={() => dispatch({ type: 'Add' })}></input>
+      <input type="button" id="LessId" name="LessName" className="LessClass" value="Less" onClick={() => dispatch({ type: 'Less' })}></input>
+
+
+      <br></br><br></br>
+
+      <span>{state.count}</span>
+
+      <Create />
+      <List />
+      
+
+    </div>
+
+
+  )
+
+}
+
+
+export default App;
