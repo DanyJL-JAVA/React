@@ -1,0 +1,102 @@
+// index.jsx
+
+import React from "react";
+import { useState } from "react";
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+root.render(
+
+<App/>
+
+);
+
+// App.jsx
+
+import React, { useRef } from "react";
+import { useState } from "react";
+import { useEffect } from "react";
+import Create from "./Components/Create";
+import View from "./Components/View";
+import List from "./Components/List";
+import { createContext } from "react";
+
+
+export const LoginContext = createContext();
+
+const App = () => {
+
+  const [str, setStr] = useState("");
+  const refer = useRef("");
+
+
+  return (
+
+    <>
+      {/* <></> -> These are Called Fragments */}
+
+      <h5>UseContext</h5>
+
+
+      <label>Name : </label>
+      <input type="text" id="txtId" ref={refer} name="txtName" className="txtClass" ></input>
+      <br></br>
+      <input type="button" id="btnId" name="btnName" value="save" onClick={() => {
+
+        setStr(refer.current.value);
+
+      }}></input>
+
+
+      <Create />
+      <List />
+
+      <LoginContext.Provider value={str}>
+
+        <View />
+
+      </LoginContext.Provider>
+
+    </>
+
+
+  )
+
+}
+
+export default App;
+
+// View.jsx
+
+import React from "react";
+import { useState } from "react";
+import { useContext } from "react";
+import { LoginContext } from "../App";
+
+const View = () => {
+
+    const Context = useContext(LoginContext);
+
+
+    return (
+
+        <>
+
+            <h5>View Page</h5>
+
+            <p>{Context}</p>
+
+
+        </>
+
+    )
+
+
+}
+
+export default View;
+
+
+
