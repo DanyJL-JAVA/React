@@ -1,0 +1,585 @@
+
+// Folders - absent && Files Present
+
+//index.js
+//App.js
+
+
+// Folders - Components && Files Present
+
+// FileName: 
+
+//ProfileCreate.jsx
+//ProfileList.jsx
+//ProfileView.jsx
+
+// ./Components/ProfileCreate
+// ./Components/ProfileList
+// ./Components/ProfileView
+
+
+
+// Folders - Slice && Files Present
+
+// FileName : ProfileSlice.jsx
+
+// ../Slice/ProfileSlice
+
+
+// Folders - Store && Files Present
+
+// FileName : ProfileStore.jsx
+
+// ./Store/ProfileStore
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//index.js
+
+import ReactDOM from "react-dom/client";
+import App from "./App";
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+
+
+
+root.render(<App/>);
+
+//index.js
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// App.js
+
+import ProfileCreate from "./Components/ProfileCreate";
+import ProfileView from "./Components/ProfileView";
+import { Provider } from "react-redux"
+import { ProStore } from "./Store/ProfileStore";
+
+
+
+const App = () => {
+
+
+
+
+  return (
+
+
+    <div className="overAllClass">
+
+
+      <Provider store={ProStore}>
+
+        <ProfileCreate />
+
+        <ProfileView />
+
+      </Provider>
+    </div>
+
+  )
+
+
+
+}
+
+export default App;
+
+
+// App.js
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// ProfileCreate.jsx
+
+
+
+import { useState } from "react";
+import { myFunc } from "../Slice/ProfileSlice";
+import { useDispatch } from "react-redux";
+import ProfileList from "./ProfileList";
+import { createContext } from "react";
+
+
+export const LoginContext = createContext();
+
+const ProfileCreate = () => {
+
+
+
+    const [str, setStr] = useState("");
+    const [dat, setDat] = useState("");
+    const [loc, setLoc] = useState("");
+    const [gen, setGen] = useState("");
+
+
+
+    const Dispatch = useDispatch();
+
+    const lst = {
+
+        id: Date.now(),
+        name: str,
+        date: dat,
+        place: loc,
+        gender: gen
+    }
+
+    const Location = [
+        {
+            id: 'Ch',
+            place: 'Chennai'
+        },
+        {
+            id: 'Md',
+            place: 'madurai'
+        },
+        {
+            id: 'my',
+            place: 'mysore'
+        },
+        {
+            id: 'Pn',
+            place: 'Pune'
+        }
+
+    ]
+
+    return (
+
+        <div className="CreateClass">
+
+            <h5>Form</h5>
+
+            <fieldset>
+
+                <legend>Application</legend>
+
+                <label>Name : </label>
+                <input type="text" id="empId" className="empClass" onChange={(event) => setStr(event.target.value)}></input>
+                <br /><br />
+                <label>Date</label>
+                <input type="date" id="dtId" name="dtName" className="dtClass" onChange={(event) => setDat(event.target.value)}></input>
+                <br /><br /><br />
+                <label>Please Select the Prefered Location</label>
+                <select id="selectId" onClick={(event) => setLoc(event.target.value)}>
+
+                    {Location.map(abc =>
+
+                        <option key={abc.id}>{abc.place}</option>
+
+                    )}
+
+                </select>
+                <br></br><br></br>
+                <label>Gender:</label>&nbsp;&nbsp;
+                {/* &nbsp; used for making space  */}
+                <span>Male</span>
+                <input type="radio" id="maleId" name="maleName" className="maleClass" onClick={(event) => {
+
+                    setGen(gen === true ? 'Female' : 'Male');
+
+                    var fem = document.getElementById("femaleId").checked;
+
+                    if (fem) {
+
+                        document.getElementById("femaleId").checked = false;
+
+                    }
+
+
+
+                }}></input>
+                <span>Female</span>
+                <input type="radio" id="femaleId" name="femaleName" className="femaleClas" onClick={(event) => {
+
+                    setGen(gen === true ? 'Male' : 'Female');
+
+
+                    var ma = document.getElementById("maleId").checked;
+
+                    if (ma) {
+
+                        document.getElementById("maleId").checked = false;
+                        // document.getElementById("femaleId").checked = false;
+
+                    }
+
+
+                }}></input>
+
+                <br /><br /><br />
+
+                <input type="button" id="saveId" name="btnName" className="saveClass" value="Save"
+                    onClick={() => {
+
+
+                        Dispatch(myFunc(lst));
+
+                        document.getElementById("empId").value = '';
+                        document.getElementById("dtId").value = '';
+                        document.getElementById("maleId").checked = false;
+                        document.getElementById("femaleId").checked = false;
+                        document.getElementById("selectId").value = '';
+
+                    }}></input>
+
+            </fieldset>
+
+            <LoginContext.Provider value={str}>
+                <ProfileList />
+            </LoginContext.Provider>
+
+
+
+        </div>
+
+
+    )
+
+
+
+}
+
+
+
+export default ProfileCreate;
+
+
+
+// ProfileCreate.jsx
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// ProfileList.jsx
+
+
+import { useContext } from "react";
+import { LoginContext } from "./ProfileCreate";
+
+const ProfileList = () => {
+
+    const strData = useContext(LoginContext);
+
+    
+    return (
+
+
+        <>
+
+            <h5>List Page</h5>
+
+
+
+            <p>Hi! {strData}</p>
+
+
+
+        </>
+
+
+    )
+
+
+}
+
+
+export default ProfileList;
+
+
+
+
+// ProfileList.jsx
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+//ProfileView.jsx
+
+
+
+import  { useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import { myDel } from '../Slice/ProfileSlice';
+import { myUpdate } from '../Slice/ProfileSlice';
+
+
+
+const ProfileView = () => {
+
+
+    const sella = useSelector((sell) => sell.storeData);
+
+    useEffect(() => {
+
+        setArrlst(sella);
+
+    }, [sella]);
+
+    const [arrlst, setArrlst] = useState([]);
+    const [editable, setEditable] = useState(false);
+    const [editId, setEditId] = useState("");
+
+    const [eName, setEName] = useState("");
+    const [eDate, setEDate] = useState("");
+    const [ePlace, setEPlace] = useState("");
+    const [eGender, setEGender] = useState("");
+
+    // Delete
+
+    const Dispatch = useDispatch();
+
+    const DeleteandSort = (Id) => {
+
+        Dispatch(myDel(Id));
+
+
+    }
+
+    // Delete
+
+
+    // Edit
+
+    const edit = (Id) => {
+
+        setEditable(true);
+        setEditId(Id);
+
+    }
+
+    // Edit
+
+
+
+    return (
+        <div>
+
+
+            <h5>ProfileView</h5>
+
+            <table>
+
+                <tr>
+                    <th>Name</th>
+                    <th>Date</th>
+                    <th>location</th>
+                    <th>Gender</th>
+                    <th>status</th>
+                </tr>
+
+
+                {arrlst.map((abc) =>
+
+
+
+
+                    <tr>
+                        <td>{editable === true && editId === abc.id ? <input type="text" placeholder={abc.name} defaultValue={abc.name}
+                            onChange={(event) => {
+
+
+                                setEName(event.target.value === '' ? abc.name : event.target.value);
+
+
+                            }} ></input> : <span>{abc.name}</span>}</td>
+                        <td>{editable === true && editId === abc.id ? <input type="date" placeholder={abc.date} defaultValue={abc.date}
+                            onChange={(event) => {
+
+                                setEDate(event.target.value === '' ? abc.date : event.target.value);
+
+                            }}></input> : <span>{abc.date}</span>}</td>
+                        <td>{editable === true && editId === abc.id ? <input type="text" placeholder={abc.place} defaultValue={abc.place}
+                            onChange={(event) => {
+
+                                setEPlace(event.target.value === '' ? abc.place : event.target.value);
+
+                            }}></input> : <span>{abc.place}</span>}</td>
+                        <td>{editable === true && editId === abc.id ? <input type="text" placeholder={abc.gender} defaultValue={abc.gender}
+                            onChange={(event) => {
+
+                                setEGender(event.target.value === "" ? abc.gender : event.target.value);
+
+                            }}></input> : <span>{abc.gender}</span>}</td>
+
+
+                        <td>
+
+                            {editable === true && editId ===
+
+                                abc.id ? (
+                                <>
+                                    <input type="button" value="Add" onClick={() => {
+
+
+                                        Dispatch(myUpdate({
+                                            id: abc.id,
+                                            name: eName === '' ? abc.name : eName,
+                                            date: eDate === '' ? abc.date : eDate,
+                                            place: ePlace === '' ? abc.place : ePlace,
+                                            gender: eGender === '' ? abc.gender : eGender
+                                        }));
+
+                                        setEditable(false);
+
+                                        //
+                                        setEName('');
+                                        setEDate('');
+                                        setEPlace('');
+                                        setEGender('');
+
+
+
+                                    }}></input>
+                                    <input type="button" value="cancel" onClick={() => setEditable(false)}></input>
+                                </>
+                            )
+                                : (
+
+                                    <>
+                                        <input type="button" id="editId" name="editName" className="editClass" value="Edit" onClick={() => edit(abc.id)}></input>
+                                        <input type="button" id="delId" name="delName" className="delClass" value="Delete" onClick={() => DeleteandSort(abc.id)}></input>
+                                    </>
+
+                                )}
+
+                        </td>
+
+
+                    </tr>
+
+
+
+                )}
+
+
+
+            </table>
+
+
+
+        </div>
+
+
+
+    )
+}
+
+export default ProfileView;
+
+
+//ProfileView.jsx
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// ProfileSlice.jsx
+
+
+import { createSlice } from "@reduxjs/toolkit";
+
+
+const initialState = [];
+const ProSlice = createSlice({
+
+    name: 'profileSlicer',
+    initialState,
+    reducers: {
+
+
+        myFunc(state, action) {
+
+            state.push(action.payload);
+
+        },
+
+        myDel(state, action) {
+
+            const delId = action.payload;
+
+            return state.filter((lst) => lst.id !== delId)
+
+        },
+
+        myUpdate(state, action) {
+
+            state = state.map(u => {
+
+                if (u.id === action.payload.id) {
+
+
+                    u.id = action.payload.id;
+                    u.name = action.payload.name;
+                    u.date = action.payload.date;
+                    u.place = action.payload.place;
+                    u.gender = action.payload.gender;
+
+
+
+
+                }
+
+                return u;
+
+            })
+
+        }
+
+
+    }
+
+
+});
+
+
+export const { myFunc, myDel, myUpdate } = ProSlice.actions;
+export default ProSlice.reducer;
+
+
+// ProfileSlice.jsx
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+// ProfileStore.jsx
+
+import { configureStore } from "@reduxjs/toolkit";
+import SliceData from "../Slice/ProfileSlice";
+
+export const ProStore = configureStore({
+
+    devTools: true, // Make the devTools: false in Production to hide the internal details from strangers in Production.
+    reducer: {
+
+        storeData: SliceData // Dynamic Name
+
+    }
+
+
+});
+
+
+// ProfileStore.jsx
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
