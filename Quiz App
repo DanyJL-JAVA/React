@@ -1,0 +1,136 @@
+import React from "react";
+import { useState } from "react";
+
+// File used :
+// File : App.js
+
+
+const App = () => {
+
+
+  const arr = [
+
+    {
+      Questions: 'What is the color of the sky?',
+      Options: [
+        { option: 'green', isCorrect: false },
+        { option: 'blue', isCorrect: true },
+        { option: 'red', isCorrect: false }
+      ]
+    },
+
+    {
+      Questions: 'National cruch?',
+
+      Options: [
+        { option: 'genilia', isCorrect: false },
+        { option: 'arasi', isCorrect: false },
+        { option: "Rashmika", isCorrect: true }
+      ]
+
+
+    },
+
+    {
+
+      Questions: 'Suriya latest movie?',
+      Options: [
+        { option: 'Karupu', isCorrect: true },
+        { option: '7thsense', isCorrect: true },
+        { option: 'Singam', isCorrect: false }
+
+      ]
+
+    }
+
+  ]
+
+
+  const [count, setCount] = useState(0);
+  const [pgChange, setPgChange] = useState(true);
+  const [correctCount, setCorrectCount] = useState(0);
+
+
+
+  return (
+
+
+    <div>
+
+
+      {pgChange === true ? (
+
+        <>
+
+          <h6>Quess page</h6>
+
+
+          {/* Question */}
+          <label>{arr[count].Questions}</label>
+
+
+          <br></br><br></br>
+
+
+          {arr[count].Options.map((a) =>
+
+            <>
+              <span><input type="button" value={a.option} onClick={() => {
+
+
+                setCount(count + 1);
+
+
+                if (a.isCorrect) {
+
+
+                  setCorrectCount(correctCount + 1);
+
+                }
+
+
+
+                if (count === arr.length - 1) {
+
+
+                  setPgChange(false);
+
+
+                }
+
+
+
+              }}></input></span>
+            </>
+
+          )}
+
+        </>
+
+
+      ) : (
+
+        <div class="dClass">
+
+
+          <h6>Score page</h6>
+
+          <h4>you have scored: {correctCount} !!</h4>
+
+        </div>
+
+
+      )}
+
+
+    </div>
+
+
+
+  )
+
+
+}
+
+
+export default App;
