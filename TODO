@@ -1,0 +1,125 @@
+import React from  "react";
+import {useState} from "react";
+
+
+const Todo = () => {
+
+
+const [str,setStr] = useState("");
+const [editId,setEditId] = useState(null);
+const [todos,setTodos] = useState([]);
+
+
+
+
+const BtnClicked = () => {
+
+
+if(!str.trim()) return
+
+if(editId === null){
+
+setTodos([...todos,
+{
+  id : Date.now(),
+  text : str,
+  complete : false
+}])
+
+
+}
+else{
+
+setTodos(todos.map((todo  => todo.id === editId ? {...todo, text : str} : todo)))
+setEditId(null);
+
+}
+
+
+setStr(" ");
+
+
+}
+
+
+// Edit
+const editable = (tod) => {
+
+setEditId(tod.id);
+setStr(tod.text);
+
+
+}
+
+// Delete
+
+const  DeleteIt = (Id) => {
+
+setTodos(todos.filter((todo) => todo.id !== Id));
+
+
+}
+
+// Complete
+
+const completeIt = (Id) => {
+
+setTodos(
+   todos.map((todo) =>
+        todo.id === Id
+          ? { ...todo, complete: !todo.complete }
+          : todo
+      )
+      )
+
+}
+
+
+
+return(
+
+
+<div className = "overClass">
+
+
+<label>Todo :</label>
+<input type = "text" id = "txtId" name = "txtName" className = "txtClass" value = {str} onChange = {(e) => setStr(e.target.value)}></input>
+<input type = "button" id = "btnId" name = "btnName" className = "btnClass" value = {editId === null ? 'Add' : 'Update'} onClick = {BtnClicked}></input>
+
+<br></br>
+
+
+<ul>
+
+{todos.map((todo) => 
+
+<li key = {todo.id}>
+
+<span  style={{
+                textDecoration: todo.complete
+                  ? "line-through"
+                  : "none",
+                color: todo.complete ? "gray" : "black",
+              }}>{todo.text}</span>
+<input type = "button" id = "completeId" value = "Complete" onClick = {() => completeIt(todo.id)}></input>
+<input type = "button" id = "EditableId" value = "Edit" onClick = {() => editable(todo)}></input>
+<input type = "button" id = "deleteid" value = "Delete" onClick = {() => DeleteIt(todo.id)}></input>
+
+</li>
+
+)}
+
+
+</ul>
+
+
+</div>
+
+
+)
+
+}
+
+
+export default Todo;
+
