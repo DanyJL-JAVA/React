@@ -1,0 +1,92 @@
+import React from "react";
+import {useState} from "react";
+
+
+const App = () => {
+
+
+const arr = [
+
+  {
+    Ques : 'What is our Nation ?',
+    ans : 'India'
+  },
+  {
+    Ques : 'what is the color of the sky?',
+    ans : 'blue'
+  },
+  {
+    Ques : 'what is the color of the sun?',
+    ans : 'orange'
+  }
+  
+];
+
+const [openIndex,setOpenIndex] = useState(null);
+
+
+return(
+
+<div className = "overAllClass">
+
+{arr.map((a,Index) => 
+<div key = {Index}>
+<div className = "OverAllDiv"
+
+style = {{
+  padding : '10px',
+  cursor : 'pointer',
+  fontWeight : 'bold',
+   border: "1px solid #ddd",
+  backgroundColor : '#f4f4f4'
+}}
+
+ onClick = {() => setOpenIndex(Index === openIndex ? null : Index)}>
+{a.Ques} {openIndex === Index ?  "▲" : "▼"}
+</div>
+
+
+{openIndex === Index && (
+
+<>
+
+<div style = {{
+
+padding : '10px',
+  cursor : 'pointer',
+  fontWeight : 'bold',
+   border: "1px solid #ddd",
+  backgroundColor : 'white'
+
+}}>{a.ans}</div>
+
+
+</>
+
+)}
+
+
+</div>
+
+
+
+)}
+
+
+
+
+
+
+</div>
+
+
+
+)
+
+
+
+
+}
+
+
+export default App;
