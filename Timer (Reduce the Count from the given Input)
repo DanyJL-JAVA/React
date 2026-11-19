@@ -1,0 +1,81 @@
+import React from "react";
+import {useState} from "react";
+
+
+const App = () => {
+
+var [str,setStr] =  useState("");
+var [cnt,setCnt] = useState(0);
+
+let timer;
+
+
+var counter = 0;
+
+    const getCounter = (cb,d) => {
+        
+
+        return function (...args) {
+
+
+            if (timer) clearInterval(timer);
+
+            timer = setInterval(() => {
+
+                cb(...args);
+
+            }, d);
+
+        };
+
+    };
+
+const IncCounter = getCounter(() => {
+
+if(cnt === 1){ 
+  
+  clearInterval(timer);
+setStr("Time Over...");
+
+}
+
+setCnt(--cnt);
+
+},1000);
+
+
+const StartTimer = () => {
+
+setStr("Time started...");
+IncCounter();
+
+
+
+}
+
+
+return(
+
+<>
+
+<label>Timer : </label>
+<input type = "text" id  = "txtId" name = "txtName" onChange = {(e) => setCnt(e.target.value)}></input>
+<input type = "button" id = "btnId" name = "btnName" className = "btnClass" value = "Start" onClick = {() => StartTimer()}></input>
+<br></br>
+<div>Count : <span id = "spanId">{cnt}</span>&nbsp;&nbsp;&nbsp;<span style = {{color : str === 'Time started...' ? 'red' : 'green'}}>{str}</span></div>
+
+
+
+
+</>
+
+
+
+)
+
+
+}
+
+
+export default App;
+
