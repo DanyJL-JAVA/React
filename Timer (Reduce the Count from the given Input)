@@ -4,51 +4,53 @@ import {useState} from "react";
 
 const App = () => {
 
-var [str,setStr] =  useState("");
-var [cnt,setCnt] = useState(0);
-
-let timer;
-
-
-var counter = 0;
-
-    const getCounter = (cb,d) => {
-        
-
-        return function (...args) {
+var[str,setStr] = useState("");
+var[count,setCount] = useState(0);
+var[start,setStart] = useState(null);
+let Timer;
 
 
-            if (timer) clearInterval(timer);
+const getIncreamented = (cb,t) => {
 
-            timer = setInterval(() => {
+return function(...args){
 
-                cb(...args);
+if(Timer) clearInterval(Timer);
 
-            }, d);
+Timer = setInterval(() => {
 
-        };
+cb(args);
 
-    };
-
-const IncCounter = getCounter(() => {
-
-if(cnt === 1){ 
-  
-  clearInterval(timer);
-setStr("Time Over...");
+},t)
 
 }
 
-setCnt(--cnt);
-
-},1000);
+}
 
 
-const StartTimer = () => {
+const getCountIncreamented = getIncreamented(() => {
 
-setStr("Time started...");
-IncCounter();
+if(count === 1){
 
+clearInterval(Timer);
+setStart(null);
+
+}
+
+setCount(--count);
+
+
+
+
+},1000)
+
+
+const getStarted = () => {
+
+if(count === 0) return; // If the Field is empty It Does not Do any Action Just Return Without doing any Further Action.
+
+
+setStart("start");
+getCountIncreamented();
 
 
 }
@@ -56,15 +58,20 @@ IncCounter();
 
 return(
 
+
 <>
 
-<label>Timer : </label>
-<input type = "text" id  = "txtId" name = "txtName" onChange = {(e) => setCnt(e.target.value)}></input>
-<input type = "button" id = "btnId" name = "btnName" className = "btnClass" value = "Start" onClick = {() => StartTimer()}></input>
-<br></br>
-<div>Count : <span id = "spanId">{cnt}</span>&nbsp;&nbsp;&nbsp;<span style = {{color : str === 'Time started...' ? 'red' : 'green'}}>{str}</span></div>
+<input type = "number" id = "txtId" name = "txtName" className = "txtCls" onChange = {(e) => setCount(e.target.value)}></input>
+<input type = "button" id = "btnId" name = "btnName" value = {start === null ? 'Start' : 'Stop'} onClick = {() => getStarted()}></input>
+<div><span>{count}</span>&nbsp;&nbsp;<span 
+style = {{
+  
+  color : start !== null ? 'green' : 'red',
+  backgroundColor : 'black'
 
+}}
 
+>{start !== null ? 'Time Started...' : 'Time Over...'}</span></div>
 
 
 </>
@@ -72,6 +79,9 @@ return(
 
 
 )
+
+
+
 
 
 }
